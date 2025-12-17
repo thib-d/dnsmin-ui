@@ -1,0 +1,31 @@
+services:
+
+  web:
+    image: dnsmin/dnsmin-web:latest
+    restart: unless-stopped
+    container_name: dnsmin_web
+    hostname: dnsmin_web
+    build:
+      context: ./
+      dockerfile: ./deploy/docker/Dockerfile
+    env_file: .env
+    volumes:
+      - ./src:/srv/app
+      - ./deploy/docker/nginx.conf:/etc/nginx/sites-enabled/default.conf
+      - ./var/log/nginx:/var/log/nginx
+    ports:
+      - "${DNSMIN_SERVICE_IP}:80:8000"
+    networks:
+      - dnsmin
+    healthcheck:
+      test: [ 'CMD', 'curl', '-f', 'http://dnsmin_web:8000' ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+      start_interval: 5s
+
+networks:
+ dnsmin:
+    external: true
+    name: dnsmin

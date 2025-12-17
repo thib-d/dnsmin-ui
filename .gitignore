@@ -1,0 +1,12 @@
+___*
+.DS_Store
+.env
+.*.env
+.idea
+src/.vite
+src/node_modules/
+src/build/*
+src/dist/*
+src/package-lock.json
+node_modules
+var
